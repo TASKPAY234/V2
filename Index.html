@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPay - Earn Money Online</title>
+<style>
+:root {
+  --primary: #00C853;
+  --primary-dark: #009624;
+  --white: #FFFFFF;
+  --bg: #FFFFFF;
+  --text: #1a1a1a;
+  --gray: #f5f5f5;
+  --border: #e0e0e0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.3s ease;
+  padding-bottom: 70px;
+}
+
+body.dark {
+  --bg: #121212;
+  --white: #1e1e1e;
+  --text: #FFFFFF;
+  --gray: #2a2a2a;
+  --border: #333;
+}
+
+/* Header */
+.header {
+  background: var(--primary);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.balance-box {
+  text-align: right;
+}
+
+.balance-label {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.balance {
+  background: rgba(255,255,255,0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Sidebar Settings */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background: var(--white);
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+  z-index: 200;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  right: 0;
+}
+
+.sidebar h3 {
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.setting-item {
+  margin-bottom: 25px;
+}
+
+.setting-item label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.color-options {
+  display: flex;
+  gap: 10px;
+}
+
+.color-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  cursor: pointer;
+}
+
+.color-btn.active {
+  border: 3px solid var(--text);
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--gray);
+  color: var(--text);
+}
+
+/* Main Content */
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-info h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.task-info p {
+  font-size: 13px;
+  color: #666;
+}
+
+body.dark .task-info p {
+  color: #aaa;
+}
+
+.task-reward {
+  text-align: right;
+}
+
+.reward {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-red {
+  background: #f44336;
+}
+
+.btn-red:hover {
+  background: #d32f2f;
+}
+
+/* Login Form */
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--gray);
+  color: var(--text);
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  z-index: 100;
+}
+
+.nav-item {
+  text-align: center;
+  color: #666;
+  cursor: pointer;
+  flex: 1;
+}
+
+body.dark .nav-item {
+  color: #aaa;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item i {
+  font-size: 20px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.nav-item span {
+  font-size: 12px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 150;
+}
+
+.overlay.active {
+  display: block;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--gray);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.stat-card h4 {
+  color: var(--primary);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.stat-card p {
+  font-size: 13px;
+  color: #666;
+}
+
+body.dark .stat-card p {
+  color: #aaa;
+}
+
+.notice {
+  background: #fff3cd;
+  color: #856404;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 15px;
+  border: 1px solid #ffeaa7;
+}
+
+body.dark .notice {
+  background: #332701;
+  color: #ffd54f;
+  border-color: #665200;
+}
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">TaskPay</div>
+    <div class="balance-box">
+      <div class="balance-label">TOTAL COINS</div>
+      <div class="balance">💰 <span id="balance">0</span></div>
+    </div>
+    <button class="menu-btn" onclick="toggleSidebar()">⋮</button>
+  </div>
+
+  <!-- Sidebar Settings -->
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <button class="close-sidebar" onclick="toggleSidebar()">×</button>
+    <h3>Settings</h3>
+    
+    <!-- WITHDRAW SECTION -->
+    <div class="setting-item">
+      <label>💸 Withdraw Coins</label>
+      <div class="notice">Minimum: 45,000 coins = ₦45,000<br>Withdraw</div>
+      <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter coins amount">
+      <button class="btn" onclick="withdrawCoins()">Withdraw</button>
+    </div>
+
+    <!-- ADD COINS SECTION -->
+    <div class="setting-item">
+      <label>💰 Add Coins</label>
+      <div class="notice">Send ₦1,000 to Opay 9056901039 = 1,000 coins<br>Enter amount you sent below</div>
+      <input type="number" id="depositAmount" class="input-field" placeholder="Amount you sent in ₦">
+      <button class="btn" onclick="addCoins()">Confirm Payment</button>
+    </div>
+    
+    <div class="setting-item">
+      <label>Theme</label>
+      <button class="btn" onclick="toggleTheme()">Switch to Dark/Light</button>
+    </div>
+
+    <div class="setting-item">
+      <label>Background Color</label>
+      <div class="color-options">
+        <div class="color-btn active" style="background:#00C853" onclick="changeColor('#00C853')"></div>
+        <div class="color-btn" style="background:#2196F3" onclick="changeColor('#2196F3')"></div>
+        <div class="color-btn" style="background:#FF5722" onclick="changeColor('#FF5722')"></div>
+        <div class="color-btn" style="background:#9C27B0" onclick="changeColor('#9C27B0')"></div>
+      </div>
+    </div>
+
+    <div class="setting-item">
+      <button class="btn btn-red" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    
+    <!-- Login Page -->
+    <div class="page active" id="loginPage">
+      <div class="card">
+        <h2 style="color:var(--primary);margin-bottom:20px;text-align:center">Login to TaskPay</h2>
+        <div class="login-form">
+          <input type="text" id="username" placeholder="Username or Email">
+          <input type="password" id="password" placeholder="Password">
+          <button class="btn" onclick="login()">Login</button>
+          <p style="text-align:center;margin-top:15px;font-size:14px">No account? <a href="#" onclick="showSignup()" style="color:var(--primary)">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks Page -->
+    <div class="page" id="tasksPage">
+      <h2 style="margin-bottom:15px">Available Tasks</h2>
+      
+      <div class="card task">
+        <div class="task-info">
+          <h3>Watch Video Ad</h3>
+          <p>Watch 30 sec video completely</p>
+        </div>
+        <div class="task-reward">
+          <div class="reward">50 coins</div>
+          <button class="btn" onclick="completeTask(50, this)" style="width:auto">Start</button>
+        </div>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <h3>Follow Instagram Page</h3>
+          <p>Follow @taskpay_official</p>
+        </div>
+        <div class="task-reward">
+          <div class="reward">100 coins</div>
+          <button class="btn" onclick="completeTask(100, this)" style="width:auto">Start</button>
+        </div>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <h3>Complete Survey</h3>
+          <p>Answer 5 questions</p>
+        </div>
+        <div class="task-reward">
+          <div class="reward">200 coins</div>
+          <button class="btn" onclick="completeTask(200, this)" style="width:auto">Start</button>
+        </div>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <h3>Download App</h3>
+          <p>Install and open TaskPay Lite</p>
+        </div>
+        <div class="task-reward">
+          <div class="reward">300 coins</div>
+          <button class="btn" onclick="completeTask(300, this)" style="width:auto">Start</button>
+        </div>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <h3>Refer Friend</h3>
+          <p>Invite friend with your link</p>
+        </div>
+        <div class="task-reward">
+          <div class="reward">500 coins</div>
+          <button class="btn" onclick="completeTask(500, this)" style="width:auto">Start</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="page" id="profilePage">
+      <h2 style="margin-bottom:15px">My Profile</h2>
+      
+      <div class="card" style="text-align:center">
+        <div style="width:80px;height:80px;background:var(--primary);border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:white;font-size:32px;font-weight:700" id="avatar">U</div>
+        <h3 id="profileName">User</h3>
+        <p style="color:#666" id="profileEmail">user@taskpay.com</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <h4 id="totalEarned">0</h4>
+          <p>Total Coins Earned</p>
+        </div>
+        <div class="stat-card">
+          <h4 id="tasksDone">0</h4>
+          <p>Tasks Done</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:10px">💡 How to Earn More</h3>
+        <p style="font-size:14px;line-height:1.6">1. Complete daily tasks<br>2. Refer friends = 500 coins each<br>3. Fund wallet: ₦1000 = 1000 coins<br>4. Min withdrawal: 45,000 coins</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav" id="bottomNav" style="display:none">
+    <div class="nav-item active" onclick="showPage('tasksPage', this)">
+      <i>📋</i>
+      <span>Tasks</span>
+    </div>
+    <div class="nav-item" onclick="showPage('profilePage', this)">
+      <i>👤</i>
+      <span>Profile</span>
+    </div>
+  </div>
+
+<script>
+let balance = 0;
+let tasksDone = 0;
+let totalEarned = 0;
+let currentUser = '';
+
+function login() {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  
+  if(user && pass) {
+    currentUser = user;
+    localStorage.setItem('taskpayUser', user);
+    document.getElementById('profileName').textContent = user;
+    document.getElementById('profileEmail').textContent = user + '@taskpay.com';
+    document.getElementById('avatar').textContent = user.charAt(0).toUpperCase();
+    
+    document.getElementById('loginPage').classList.remove('active');
+    document.getElementById('tasksPage').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex';
+    loadData();
+  } else {
+    alert('Enter username and password');
+  }
+}
+
+function showSignup() {
+  alert('Signup: Just enter any username + password to create account');
+}
+
+function logout() {
+  localStorage.clear();
+  location.reload();
+}
+
+function showPage(pageId, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  toggleSidebar(false);
+}
+
+function toggleSidebar(force) {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  
+  if(force === false) {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  } else {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+}
+
+function changeColor(color) {
+  document.documentElement.style.setProperty('--primary', color);
+  document.documentElement.style.setProperty('--primary-dark', color);
+  localStorage.setItem('primaryColor', color);
+  
+  document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function completeTask(amount, btn) {
+  btn.textContent = 'Done';
+  btn.disabled = true;
+  balance += amount;
+  tasksDone++;
+  totalEarned += amount;
+  updateUI();
+  saveData();
+  alert(`${amount} coins added to your balance!`);
+}
+
+// NEW: Add Coins Function - ₦1000 = 1000 coins
+function addCoins() {
+  const amount = parseInt(document.getElementById('depositAmount').value);
+  
+  if(!amount || amount < 100) {
+    alert('Enter valid amount. Minimum ₦100');
+    return;
+  }
+  
+  // 1 Naira = 1 Coin
+  balance += amount;
+  totalEarned += amount;
+  updateUI();
+  saveData();
+  
+  document.getElementById('depositAmount').value = '';
+  alert(`✅ Payment confirmed! ${amount} coins added to your balance.\n\nNew balance: ${balance} coins`);
+  toggleSidebar(false);
+}
+
+// NEW: Withdraw Coins Function - 45000 min
+function withdrawCoins() {
+  const amount = parseInt(document.getElementById('withdrawAmount').value);
+  
+  if(!amount) {
+    alert('Enter amount to withdraw');
+    return;
+  }
+  
+  if(amount < 45000) {
+    alert('Minimum withdrawal is 45,000 coins = ₦45,000');
+    return;
+  }
+  
+  if(amount > balance) {
+    alert(`Insufficient balance. You have ${balance} coins`);
+    return;
+  }
+  
+  balance -= amount;
+  updateUI();
+  saveData();
+  
+  document.getElementById('withdrawAmount').value = '';
+  alert(`✅ Withdrawal request sent!\n\nAmount: ${amount} coins = ₦${amount}\nTo: Opay 9056901039\n\nYou go receive alert within 24hrs`);
+  toggleSidebar(false);
+}
+
+function updateUI() {
+  document.getElementById('balance').textContent = balance.toLocaleString();
+  document.getElementById('totalEarned').textContent = totalEarned.toLocaleString();
+  document.getElementById('tasksDone').textContent = tasksDone;
+}
+
+function saveData() {
+  localStorage.setItem('balance', balance);
+  localStorage.setItem('tasksDone', tasksDone);
+  localStorage.setItem('totalEarned', totalEarned);
+}
+
+function loadData() {
+  balance = parseInt(localStorage.getItem('balance')) || 0;
+  tasksDone = parseInt(localStorage.getItem('tasksDone')) || 0;
+  totalEarned = parseInt(localStorage.getItem('totalEarned')) || 0;
+  updateUI();
+  
+  if(localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+  }
+  
+  const savedColor = localStorage.getItem('primaryColor');
+  if(savedColor) {
+    document.documentElement.style.setProperty('--primary', savedColor);
+    document.documentElement.style.setProperty('--primary-dark', savedColor);
+  }
+}
+
+// Auto login if user exists
+window.onload = () => {
+  const user = localStorage.getItem('taskpayUser');
+  if(user) {
+    currentUser = user;
+    document.getElementById('profileName').textContent = user;
+    document.getElementById('profileEmail').textContent = user + '@taskpay.com';
+    document.getElementById('avatar').textContent = user.charAt(0).toUpperCase();
+    document.getElementById('loginPage').classList.remove('active');
+    document.getElementById('tasksPage').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex';
+    loadData();
+  }
+}
+</script>
+</body>
+</html>
